@@ -1,0 +1,86 @@
+body {
+  background-image: url("/img/background_big.jpg");
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-size: cover;
+  background-color: #000000;
+
+}
+
+#main {
+  position: absolute;
+  height: 95vh;
+  width: 99vw;
+  margin: 0 0 auto;
+  background-color: #000000;
+  opacity: 0.4;
+  filter: alpha(opacity=40); /* For IE8 and earlier */
+}
+
+#leftBarBg {
+  position: absolute;
+  background-image: url('/img/background_big.jpg');
+  top: 0px;
+  right: 0px;
+  bottom: 0px;
+  left: 0px;
+  z-index: 99;
+  -webkit-filter: blur(5px);
+  -moz-filter: blur(5px);
+  -o-filter: blur(5px);
+  -ms-filter: blur(5px);
+  filter: blur(5px);
+  filter: url(data:image/svg+xml;base64,PHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+DQoJPGZpbHRlciBpZD0iYmx1ciI+DQoJCTxmZUdhdXNzaWFuQmx1ciBzdGREZXZpYXRpb249IjMiIC8+DQoJPC9maWx0ZXI+DQo8L3N2Zz4=#blur);
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-size: cover;
+  height: 95vh;
+  width: 20%;
+  min-width: 20%;
+}
+
+#leftBar {
+  position: absolute;
+  height: 95vh;
+  width: 20%;
+  min-width: 20%;
+  background: rgb(20,51,7); /* for IE */
+  background: rgba(20,51,7,0.6);
+  z-index: 100;
+  -moz-border-radius: 15px;
+  border-radius: 15px;
+}
+
+#canvasArea {
+  margin-left: 22%;
+  width: 75%;
+  background-color: rgba(0,0,0,0.3);
+  height: 95vh;
+  z-index: 101;
+  position: relative;
+}
+
+#canvasTestBG {
+  position: absolute;
+  z-index: 102;
+}
+
+#canvasTest {
+  position: absolute;
+  z-index: 103;
+}
+
+.page-title {
+  color:Silver;
+  font-family: 'monof55';
+}
+
+/***************************** FONTS *********************************************/
+
+@font-face {
+    font-family: 'monof55';
+    src: url('/fonts/SourceCodePro-Light.otf');
+    font-weight: normal;
+    font-style: normal;
+}
