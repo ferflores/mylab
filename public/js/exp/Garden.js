@@ -11,11 +11,13 @@ function Garden(){
 
 	this.run = function(canvas, canvasWidth, canvasHeight){
 		_this = this;
-		_this.floor = canvas.height - 50;
-		Garden.canvas = canvas;
-		Garden.context = canvas.getContext("2d");
-		_this.cx = canvas.width / 2;
-		_this.cy = canvas.height / 2;
+		_this.floor = canvas[1].height - 50;
+		Garden.canvas = canvas[1];
+		Garden.context = canvas[1].getContext("2d");
+		Garden.canvasBg = canvas[0];
+		Garden.contextBg = canvas[0].getContext("2d");
+		_this.cx = canvas[1].width / 2;
+		_this.cy = canvas[1].height / 2;
 		Garden.context.webkitImageSmoothingEnabled = true;
 
 		require(["/js/classes/Vectors/Vector.js","/js/classes/Particles/Particle.js"], function(Vectors) {
@@ -91,7 +93,7 @@ function Garden(){
 			var plant = Garden.plants[x];
 
 			//if(!plant.finished){
-				plant.draw(Garden.context);
+				plant.draw(Garden.context, Garden.contextBg);
 			//}
 			
 		}
@@ -119,8 +121,8 @@ function Garden(){
 	}
 
 	this.drawFLoor = function(){
-		Garden.context.fillStyle = "#00FF66";
-		Garden.context.fillRect(0, Garden.canvas.height-50, Garden.canvas.width, 50 );
+		Garden.contextBg.fillStyle = "#00FF66";
+		Garden.contextBg.fillRect(0, Garden.canvas.height-50, Garden.canvas.width, 50 );
 	}
 	
 	this.erase = function(){
@@ -131,7 +133,6 @@ function Garden(){
 
 	this.main = function(){
 		_this.erase();
-		_this.drawFLoor();
 		_this.drawSeeds();
 		_this.drawPLants();
 		requestAnimationFrame(_this.main);
@@ -141,6 +142,8 @@ function Garden(){
 Garden.plants = [];
 Garden.context = null;
 Garden.canvas = null;
+Garden.canvasBg = null;
+Garden.contextBg = null;
 Garden.maxBranchDepth = 3;
 Garden.initialLineWIdth = 2;
 Garden.currentImageData = null;
@@ -209,14 +212,13 @@ function Plant(){
 		}
 	}
 
-	this.draw = function(context){
+	this.draw = function(context, contextBg){
 
 		context.strokeStyle = this.color;
 		/*context.shadowColor = '#FFFF00';
       	context.shadowBlur = 5;
       	context.shadowOffsetX = 0;
       	context.shadowOffsetY = 0;*/
-		context.lineCap = "rounded";
 
 
 		var yPoint = this.currentY = Math.sin(this.direction * Math.PI / 180) * this.growingLength + this.y;
@@ -227,7 +229,7 @@ function Plant(){
 
 		for(var y = 0; y< this.branches.length;y++){
 			if(this.currentY<this.branches[y].y){
-				this.branches[y].draw(context);
+				this.branches[y].draw(context, contextBg);
 			}
 		}
 
