@@ -6,7 +6,7 @@
 		<title>Fernando Flores V Lab</title>
 		<link rel="stylesheet" href="{{ asset ("/css/newLab.css") }}" />
 		<script src="{{ asset("/js/vendor/jquery1.11.js") }}"></script>
-		<script src="{{ asset("/js/exp/Garden.js") }}"></script>
+		<script src="{{ asset("/js/exp/fractalTree.js") }}"></script>
 		<script src="{{ asset("/js/myblog.js") }}"></script>
 		<script src="{{ asset("/js/vendor/require.js") }}"></script>
 	</head>
@@ -75,7 +75,7 @@
 	      	var canvas2 = document.getElementById("canvasTestBG");
 	      	canvas2.width = $(canvas2.parentNode).width();
 	      	canvas2.height = $(canvas2.parentNode).height();
-	      	new Garden().run([canvas2, canvas]);
+	      	new FractalTree().run([canvas2, canvas]);
 	      });
 	    </script>
 	</body>

@@ -12,17 +12,17 @@ function Solar(){
 
 	this.run = function(canvas, canvasWidth, canvasHeight){
 		_this = this;
-		_this.canvas = canvas;
-		_this.context = canvas.getContext("2d");
+		_this.canvas = canvas[1];
+		_this.context = canvas[1].getContext("2d");
 		_this.context.save();
-		_this.cx = canvas.width / 2;
-		_this.cy = canvas.height / 2;
+		_this.cx = canvas[1].width / 2;
+		_this.cy = canvas[1].height / 2;
 		_this.configure();
 		_this.addLine();
 		_this.drawLines();
 		_this.context.webkitImageSmoothingEnabled = true;
 		_this.context.translate(.5,.5);
-		setInterval(_this.updateValues, 1);
+		_this.updateValues();
 	}
 
 	this.configure = function(){
@@ -31,8 +31,8 @@ function Solar(){
 		_this.drawCenter(_this.outsideRatio);
 		_this.canvas.addEventListener("mousemove", function(e){
 			_this.incMouse = Math.sqrt(
-					Math.pow((e.pageX  - _this.canvas.offsetLeft) - _this.cx, 2) 
-					+ Math.pow((e.pageY - _this.canvas.offsetTop) - _this.cy, 2)
+					Math.pow((e.pageX  - _this.canvas.offsetParent.offsetLeft) - _this.cx, 2) 
+					+ Math.pow((e.pageY - _this.canvas.offsetParent.offsetTop) - _this.cy, 2)
 				) ;
 		});
 	}
@@ -108,8 +108,8 @@ function Solar(){
 
 	this.erase = function(){
 		_this.canvas.width = _this.canvas.width;
-		_this.context.fillStyle = "#000000";
-		_this.context.fillRect(0, 0, _this.canvas.width, _this.canvas.height);
+		/*_this.context.fillStyle = "#000000";
+		_this.context.fillRect(0, 0, _this.canvas.width, _this.canvas.height);*/
 		
 	}
 
@@ -156,6 +156,7 @@ function Solar(){
 		_this.configure();
 		_this.drawLines();
 		_this.context.stroke();
+		requestAnimationFrame(_this.updateValues);
 	}
 }
 /*
