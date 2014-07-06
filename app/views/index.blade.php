@@ -6,7 +6,8 @@
 		<title>Fernando Flores V Lab</title>
 		<link rel="stylesheet" href="{{ asset ("/css/newLab.css") }}" />
 		<script src="{{ asset("/js/vendor/jquery1.11.js") }}"></script>
-		<script src="{{ asset("/js/exp/fractalTree.js") }}"></script>
+		<script src="{{ asset("/js/exp/Garden.js") }}"></script>
+		<script src="{{ asset("/js/common.js") }}"></script>
 		<script src="{{ asset("/js/myblog.js") }}"></script>
 		<script src="{{ asset("/js/vendor/require.js") }}"></script>
 	</head>
@@ -62,20 +63,29 @@
 		</div>
 		<div id="leftBar">
 			<h2 class="page-title">Fernando Flores V</h2>
+			<div id="posts">
+				<div id="upArrowDiv">
+					<img id="upArrow" class="arrow" src="/img/icons/uparrow.png">
+				</div>
+				<div id="postsGrid">
+					<div id="postsLoading" style="display:none">
+						<img id="postsLoadingImg" src="/img/loader.gif">
+					</div>
+				</div>
+				<div id="downArrowDiv">
+					<img id="downArrow" class="arrow" src="/img/icons/downarrow.png">
+				</div>
+			</div>
 		</div>
 		<div id="canvasArea">
-			<canvas id="canvasTestBG"></canvas>
-			<canvas id="canvasTest"></canvas>
+			<canvas id="canvasBg" class="canvasBg canvasElement"></canvas>
+			<canvas id="canvasMain" class="canvasMain canvasElement"></canvas>
 		</div>
 		<script>
 	      $(document).ready(function(){
-	      	var canvas = document.getElementById("canvasTest");
-	      	canvas.width = $(canvas.parentNode).width();
-	      	canvas.height = $(canvas.parentNode).height();
-	      	var canvas2 = document.getElementById("canvasTestBG");
-	      	canvas2.width = $(canvas2.parentNode).width();
-	      	canvas2.height = $(canvas2.parentNode).height();
-	      	new FractalTree().run([canvas2, canvas]);
+
+	      	new MyBlog().init();
+
 	      });
 	    </script>
 	</body>

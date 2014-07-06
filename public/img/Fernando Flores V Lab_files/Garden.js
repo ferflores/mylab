@@ -8,7 +8,6 @@ function Garden(){
 	this.floor = 0;
 	this.growProcLimit = 3;
 	this.seedsBeingProcessed = 0;
-	this.stopped = false;
 
 	this.run = function(canvas, canvasWidth, canvasHeight){
 		_this = this;
@@ -25,10 +24,6 @@ function Garden(){
 			_this.configure();
 			_this.main();
 		});
-	}
-
-	this.stop = function(){
-		_this.stopped = true;
 	}
 
 	this.configure = function(){
@@ -140,9 +135,7 @@ function Garden(){
 		_this.erase();
 		_this.drawSeeds();
 		_this.drawPLants();
-		if(!_this.stopped){
-			requestAnimationFrame(_this.main);
-		}
+		requestAnimationFrame(_this.main);
 	}
 }
 

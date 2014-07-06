@@ -8,32 +8,41 @@ function PythTree(){
 	this.mouseDistance = 100;
 	this.baseSize = 0;
 	this.angle = Math.PI / 4;
+	this.stopped = false;
 
-	this.run = function(canvas, canvasWidth, canvasHeight){
+	this.run = function(canvases, canvasWidth, canvasHeight){
 		_this = this;
-		_this.canvas = canvas;
-		_this.context = canvas.getContext("2d");
+		_this.canvas = canvases[1];
+		_this.context = canvases[1].getContext("2d");
 		_this.context.save();
-		_this.cx = canvas.width / 2;
-		_this.cy = canvas.height / 2;
+		_this.cx = canvases[1].width / 2;
+		_this.cy = canvases[1].height / 2;
 		_this.configure();
 		_this.draw();
+	}
+
+	this.stop = function(){
+		_this.stopped = true;
 	}
 
 	this.configure = function(){
 		_this.erase();
 		_this.baseSize = _this.canvas.height * .2;
 		_this.canvas.addEventListener("mousemove", function(e){
-			_this.mouseDistance = Math.sqrt(
-				Math.pow((e.pageX - _this.canvas.offsetParent.offsetLeft) - _this.cx, 2)
-				+Math.pow((e.pageY - _this.canvas.offsetParent.offsetTop) - _this.cy, 2));
+			if(!_this.stopped){
+				_this.mouseDistance = Math.sqrt(
+					Math.pow((e.pageX - _this.canvas.offsetParent.offsetLeft) - _this.cx, 2)
+					+Math.pow((e.pageY - _this.canvas.offsetParent.offsetTop) - _this.cy, 2));
 
-			if(e.pageX - _this.canvas.offsetParent.offsetLeft > _this.cx && _this.angle < Math.PI / 3)
-				_this.angle += 0.015;
-			if(e.pageX - _this.canvas.offsetParent.offsetLeft < _this.cx && _this.angle > Math.PI / 5)
-				_this.angle -= 0.015;
+				if(e.pageX - _this.canvas.offsetParent.offsetLeft > _this.cx && _this.angle < Math.PI / 3)
+					_this.angle += 0.015;
+				if(e.pageX - _this.canvas.offsetParent.offsetLeft < _this.cx && _this.angle > Math.PI / 5)
+					_this.angle -= 0.015;
 
-			_this.draw();
+				_this.draw();
+			}else{
+				_this.canvas.removeEventListener("mousemove");
+			}
 		});
 	}
 

@@ -14,8 +14,10 @@ body {
   width: 99vw;
   margin: 0 0 auto;
   background-color: #000000;
-  opacity: 0.4;
-  filter: alpha(opacity=40); /* For IE8 and earlier */
+  opacity: 0;
+  filter: alpha(opacity=0); /* For IE8 and earlier */
+  -moz-border-radius: 15px;
+  border-radius: 15px;
 }
 
 #leftBarBg {
@@ -55,18 +57,35 @@ body {
 #canvasArea {
   margin-left: 22%;
   width: 75%;
-  background-color: rgba(0,0,0,0.3);
+  background-color: rgba(0,0,0,0.7);
   height: 95vh;
   z-index: 101;
   position: relative;
+  -moz-border-radius: 15px;
+  border-radius: 15px;
 }
 
-#canvasTestBG {
+.canvasBg {
   position: absolute;
   z-index: 102;
 }
 
-#canvasTest {
+.arrow {
+  width: 30px;
+  cursor:pointer;
+  padding-bottom: 1rem;
+  padding-top: 1rem;
+}
+
+#posts {
+  text-align: center;
+}
+
+#postsGrid {
+  vertical-align: middle;
+}
+
+.canvasMain {
   position: absolute;
   z-index: 103;
 }
@@ -74,6 +93,43 @@ body {
 .page-title {
   color:Silver;
   font-family: 'monof55';
+  text-align: center;
+}
+
+.post-title {
+  color:Silver;
+  font-family: 'monof55';
+  text-align: center;
+  padding-bottom: .2rem;
+  cursor:pointer;
+}
+
+.preview-img{
+  width: 80%;
+  cursor:pointer;
+  padding-bottom: .4rem;
+  filter: url("data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\'><filter id=\'old-timey\'><feColorMatrix type=\'matrix\' values=\'0.14 0.45 0.05 0 0 0.12 0.39 0.04 0 0 0.08 0.28 0.03 0 0 0 0 0 1 0\'/></filter></svg>#old-timey");
+  -webkit-filter: sepia(1);
+  -webkit-filter: sepia(100%);
+  -moz-filter: sepia(100%);
+  -ms-filter: sepia(100%);
+  -o-filter: sepia(100%);
+  filter: sepia(100%);
+}
+
+
+.preview-img:hover {
+    filter: none;
+    -webkit-filter: sepia(0);
+    -moz-filter: sepia(0);
+    -ms-filter: sepia(0);
+    -o-filter: sepia(0);
+    filter: sepia(0);
+}
+
+#postsLoadingImg {
+  width: 20%;
+  max-width: 100px;
 }
 
 /***************************** FONTS *********************************************/

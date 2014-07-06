@@ -8,6 +8,7 @@ function FractalTree(){
 	var canvasRef = null;
 	var canvasContext = null;
 	this.lineThickness = 5;
+	this.stopped = false;
 
 	this.run = function(canvas, canvasWidth, canvasHeight){
 		_this = this;
@@ -23,6 +24,10 @@ function FractalTree(){
 				_this.draw();
 			}
 		});
+	}
+
+	this.stop = function(){
+		_this.stopped = false;
 	}
 
 	this.draw = function(){

@@ -1,65 +1,292 @@
 function MyBlog(){
 
 	var _this = null;
+	this.firstLoaded = false;
 
 	this.init = function(){
 		if(_this == null){
 			_this = this;
 		}
 
-		_this.config();
+		_this.getPageNumber();
+		_this.loadPosts();
+		_this.bindMainEvents();
+		_this.bindWindowEvents();
 	}
 
-	this.config = function(){
-		/**
-		 * Provides requestAnimationFrame in a cross browser way.
-		 * @author paulirish / http://paulirish.com/
-		 */
-		 
-		if ( !window.requestAnimationFrame ) {
-		 
-			window.requestAnimationFrame = ( function() {
-		 
-				return window.webkitRequestAnimationFrame ||
-				window.mozRequestAnimationFrame ||
-				window.oRequestAnimationFrame ||
-				window.msRequestAnimationFrame ||
-				function( /* function FrameRequestCallback */ callback, /* DOMElement Element */ element ) {
-		 
-					window.setTimeout( callback, 1000 / 60 );
-		 
-				};
-		 
-			} )();
- 
-		}
-	}
-	
 	this.bindWindowEvents = function(){
-		/*if(window.onresize == null){
+		if(window.onresize == null){
 			window.onresize = function(event) {
 	  			_this.resize();
 			};
-		}*/
+		}
+	}
+
+	this.bindMainEvents = function(){
+		$("#upArrow").on("mouseover",function(){
+			$(this).animate({ width: "50"}, "fast");
+		});
+		$("#downArrow").on("mouseover",function(){
+			$(this).animate({ width: "50"}, "fast");
+		});
+		$("#upArrow").on("mouseout",function(){
+			$(this).animate({ width: "30"}, "fast");
+		});
+		$("#downArrow").on("mouseout",function(){
+			$(this).animate({ width: "30"}, "fast");
+		});
+
+		$("#downArrow").on("click", function(){
+			_this.getNextPage();
+		});
+		$("#upArrow").on("click", function(){
+			_this.getPrevPage();
+		});
+	}
+
+	this.bindPostsEvents = function(){
+
+		$(".post-title").on("mouseover", function(){
+			_this.hoverPost(this);
+		});
+
+		$(".preview-img").on("mouseover", function(){
+			_this.hoverPost(this);
+		});
+
+		$(".post-title").on("mouseout", function(){
+			_this.mouseOutPost(this);
+		});
+
+		$(".preview-img").on("mouseout", function(){
+			_this.mouseOutPost(this);
+		});
+
+		$(".post-title").on("click", function(){
+			_this.showPost(this.closest(".post").attr("data-id"));
+		});
+
+		$(".preview-img").on("click", function(){
+			_this.showPost($(this).closest(".post").attr("data-id"));
+		});
 	}
 
 	this.resize = function(){
 
-		var canvasElements = MyBlog.postElements;
-		$.each(canvasElements, function(i, e){
-			/*var height = $(window).width() * $(e).attr("data-window-scale-ratio");
-			$(e).height(height);
-
-			var width = $(e).height() / $(e).attr("data-scale-ratio");
-			$(e).width(width-300);*/
-			$(e).width($(e).parent().width());
-			$(e).height($(e).width() * $(e).attr("data-scale-ratio"));
+		$.each($(".canvasElement"), function(i, e){
+			e.width = $(e).parent().width();
+			e.height = $(e).parent().height();
+			console.log(e.width);
 
 		});
 
 	}
+
+	this.loadPosts = function(localPage){
+
+		var pageNumber = MyBlog.pageNumber;
+
+		var requestData = {
+			p: pageNumber
+		}
+
+		if(!pageNumber){
+			$("#upArrowDiv").hide();
+		}
+
+		if(localPage == null){
+			var ajaxConfig = {
+				URL:"/getPosts",
+				data: requestData,
+				async:true,
+				callBack: _this.buildPosts,
+				requestCallBack: _this.requestPostsCallBack
+			}
+
+			new AjaxRequest().request(ajaxConfig);
+		}else{
+			_this.buildPostsLocal(localPage);
+		}
+
+	}
+
+	this.buildPosts = function(data){
+		var parsedData = JSON.parse(data);
+
+		var pageData = {
+			pageNumber:MyBlog.pageNumber,
+			noBack:parsedData.noBack,
+			lastPost:parsedData.lastPost,
+			posts:parsedData.posts
+		}
+
+		MyBlog.postPages.push(pageData);
+
+		$("#postsGrid").empty();
+
+		parsedData.noBack ? $("#upArrowDiv").hide() : $("#upArrowDiv").show();
+		parsedData.lastPost ? $("#downArrowDiv").hide() : $("#downArrowDiv").show();
+
+		_this.buildPostsHtml(parsedData.posts);
+
+		if(!_this.firstLoaded){
+			_this.firstLoaded = true;
+			_this.showPost(MyBlog.postElements[0].id);
+			console.log("firstLoaded");
+		}
+	}
+
+	this.buildPostsLocal = function(data){
+		$("#postsGrid").empty();
+		data.noBack ? $("#upArrowDiv").hide() : $("#upArrowDiv").show();
+		data.lastPost ? $("#downArrowDiv").hide() : $("#downArrowDiv").show();
+		_this.buildPostsHtml(data.posts);
+	}
+
+	this.buildPostsHtml = function(data){
+		$.each(data, function(i,e){
+			var html = "<div class='post' style='display:none' data-id='"+e.id+"'";
+			html+=" data-script-url='"+e.scriptUrl+"' data-script-class='"+e.scriptClass+"'>";
+			html += "<div class='post-title'> "+ e.title +"</div>";
+			html += "<div>";
+			html += "<img class='preview-img' src='"+ e.img +"'>";
+			html += "</div>";
+			html += "</div>";
+
+			$("#postsGrid").append(html);
+
+			if(!_this.postIsLoaded(e.id)){
+				var post = {
+					id: e.id,
+					scriptUrl: e.scriptUrl,
+					scriptClass: e.scriptClass 
+				}
+
+				MyBlog.postElements.push(post);
+			}
+
+		});
+
+		$.each($(".post"), function(i,e){
+			$(e).fadeIn("slow");
+		})
+
+
+		_this.bindPostsEvents();
+	}
+
+	this.postIsLoaded = function(postId){
+		var found = false;
+		$.each(MyBlog.postElements, function(i,e){
+			if(e.id == postId){
+				found = true;
+			}
+		});
+
+		return found;
+	}
+
+	this.hoverPost = function(elm){
+		var parent = $(elm).closest(".post");
+
+		$(parent).css("backgroundColor","rgba(0,0,0,0.5");
+	}
+
+	this.mouseOutPost = function(elm){
+		var parent = $(elm).closest(".post");
+
+		$(parent).css("backgroundColor","rgba(0,0,0,0");
+	}
+
+	this.getPageNumber = function(){
+		var pageNumberVal = getParameterByName("p");
+
+		var pageNumber = pageNumberVal.length > 0 ? pageNumberVal : "1";
+		pageNumber = isNumber(pageNumber) ? parseInt(pageNumber) : 1;
+
+		pageNumber = pageNumber < 1 ? 1 : pageNumber;
+	}
+
+	this.getNextPage = function(){
+		MyBlog.pageNumber++;
+		var localPage = _this.getLocalPage(MyBlog.pageNumber);
+		_this.loadPosts(localPage);
+	}
+
+	this.getLocalPage = function(page){
+		var data = null;
+		$.each(MyBlog.postPages, function(i,e){
+			if(e.pageNumber == page){
+				data = e;
+			}
+		});
+
+		return data;
+	}
+
+	this.getPrevPage = function(){
+		if(MyBlog.pageNumber>0){
+			MyBlog.pageNumber--;
+			var localPage = _this.getLocalPage(MyBlog.pageNumber);
+			_this.loadPosts(localPage);
+		}
+	}
+
+	this.requestPostsCallBack = function(){
+		$("#postsLoading").show();
+	}
+
+	this.showPost = function(postId){
+		var post = null;
+		if(MyBlog.currentObject != null){
+			MyBlog.currentObject.stop();
+			delete MyBlog.currentObject;
+			MyBlog.currentObject = null;
+		}
+		$.each(MyBlog.postElements, function(i,e){
+			if(e.id == postId){
+				post = e;
+				return false;
+			}
+		});
+
+		if(post != null){
+			$.getScript(post.scriptUrl, function(){
+
+				var canvases = [];
+		        var canvasRef = $(".canvasMain");
+		        var canvasBg = $(".canvasBg");
+
+		        var prevWidth = canvasRef.width;
+		        var prevHeight = canvasRef.height;
+
+		        $(".canvasMain").remove();
+		        $(".canvasBg").remove();
+
+		        $("#canvasArea").append("<canvas id='canvasBg' class='canvasBg canvasElement'></canvas> <canvas id='canvasMain' class='canvasMain canvasElement'></canvas>");
+
+		        canvasRef = $(".canvasMain")[0];
+		        canvasBg = $(".canvasBg")[0];
+
+		        canvasRef.width = $("#canvasArea").width();
+		        canvasRef.height = $("#canvasArea").height();
+		        canvasBg.width = $("#canvasArea").width();
+		        canvasBg.height = $("#canvasArea").height();
+
+		        canvases.push(canvasBg);
+		        canvases.push(canvasMain);
+
+		        var scriptClass = new window[post.scriptClass]();
+		        MyBlog.currentObject = scriptClass;
+		        scriptClass.run(canvases);
+      		});
+		}
+	}
 }
 
 MyBlog.postElements = [];
+MyBlog.postPages = [];
+MyBlog.pageNumber = 1;
+MyBlog.currentObject = null;
 
 function Common(){}

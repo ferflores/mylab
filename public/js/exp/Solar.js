@@ -9,6 +9,7 @@ function Solar(){
 	this.lines = [];
 	this.increment = 1;
 	this.incMouse = 5;
+	this.stopped = false;
 
 	this.run = function(canvas, canvasWidth, canvasHeight){
 		_this = this;
@@ -23,6 +24,10 @@ function Solar(){
 		_this.context.webkitImageSmoothingEnabled = true;
 		_this.context.translate(.5,.5);
 		_this.updateValues();
+	}
+
+	this.stop = function(){
+		_this.stopped = true;
 	}
 
 	this.configure = function(){
@@ -156,7 +161,9 @@ function Solar(){
 		_this.configure();
 		_this.drawLines();
 		_this.context.stroke();
-		requestAnimationFrame(_this.updateValues);
+		if(!_this.stopped){
+			requestAnimationFrame(_this.updateValues);
+		}
 	}
 }
 /*

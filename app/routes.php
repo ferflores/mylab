@@ -15,3 +15,5 @@ Route::get('/', function()
 {
 	return View::make('index');
 });
+
+Route::post('getPosts', array('uses'=>'HomeController@getPosts'));
