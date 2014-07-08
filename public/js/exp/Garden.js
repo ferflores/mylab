@@ -31,6 +31,26 @@ function Garden(){
 		_this.stopped = true;
 	}
 
+	this.reset = function(){
+		Garden.plants = [];
+		Garden.canvasBg = null;
+		Garden.contextBg = null;
+		Garden.maxBranchDepth = 3;
+		Garden.initialLineWIdth = 2;
+		Garden.currentImageData = null;
+		Garden.posNeg = [-1,1];
+	}
+
+	this.resize = function(){
+		_this.floor = canvas[1].height - 50;
+		Garden.canvas = canvas[1];
+		Garden.context = canvas[1].getContext("2d");
+		Garden.canvasBg = canvas[0];
+		Garden.contextBg = canvas[0].getContext("2d");
+		_this.cx = canvas[1].width / 2;
+		_this.cy = canvas[1].height / 2;
+	}
+
 	this.configure = function(){
 		_this.erase();
 		_this.drawFLoor();

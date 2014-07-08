@@ -30,10 +30,19 @@ function Solar(){
 		_this.stopped = true;
 	}
 
+	this.reset = function(){
+
+	}
+
+	this.resize = function(){
+		
+	}
+
 	this.configure = function(){
 		_this.erase();
 		_this.drawCenter(_this.centerRatio);
 		_this.drawCenter(_this.outsideRatio);
+		_this.canvas.onselectstart = function () { return false; }
 		_this.canvas.addEventListener("mousemove", function(e){
 			_this.incMouse = Math.sqrt(
 					Math.pow((e.pageX  - _this.canvas.offsetParent.offsetLeft) - _this.cx, 2) 

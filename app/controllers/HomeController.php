@@ -25,4 +25,26 @@ class HomeController extends BaseController {
 		return json_encode($result);
 	}
 
+	function getPost(){
+		$postId = Input::get("exp","1");
+
+		if(is_numeric($postId)){
+			if(intval($postId)>0){
+				$postId = intval($postId);
+			}else{
+				$postId = 1;
+			}
+		}else{
+			$postId = 1;
+		}
+
+		$post = Post::find($postId);
+
+		if($post == null){
+			$post = Post::first();
+		}
+		
+		return json_encode($post);
+	}
+
 }

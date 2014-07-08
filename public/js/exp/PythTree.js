@@ -4,7 +4,7 @@ function PythTree(){
 	this.context = null;
 	this.cx = 0;
 	this.cy = 0;
-	this.maxDepth = 10;
+	this.maxDepth = 9;
 	this.mouseDistance = 100;
 	this.baseSize = 0;
 	this.angle = Math.PI / 4;
@@ -25,9 +25,18 @@ function PythTree(){
 		_this.stopped = true;
 	}
 
+	this.reset = function(){
+
+	}
+
+	this.resize = function(){
+		
+	}
+
 	this.configure = function(){
 		_this.erase();
 		_this.baseSize = _this.canvas.height * .2;
+		_this.canvas.onselectstart = function () { return false; }
 		_this.canvas.addEventListener("mousemove", function(e){
 			if(!_this.stopped){
 				_this.mouseDistance = Math.sqrt(
@@ -62,8 +71,8 @@ function PythTree(){
 
 		_this.context.translate(-_this.baseSize / 2, 0);
 		var depth = _this.mouseDistance/60;
-		if(depth > 16)
-			depth = 16
+		if(depth > _this.maxDepth)
+			depth = _this.maxDepth;
 		if(depth < 1)
 			depth = 0
 

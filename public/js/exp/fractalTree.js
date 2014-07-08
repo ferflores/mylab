@@ -17,7 +17,7 @@ function FractalTree(){
 		_this.canvasContext = _this.canvasRef.getContext("2d");
 
 		_this.draw();
-
+		_this.canvasRef.onselectstart = function () { return false; }
 		_this.canvasRef.addEventListener("click", function(event){
 			if(_this.maxDepth < 15){
 				_this.maxDepth += 1;
@@ -28,6 +28,14 @@ function FractalTree(){
 
 	this.stop = function(){
 		_this.stopped = false;
+	}
+
+	this.reset = function(){
+
+	}
+
+	this.resize = function(){
+		
 	}
 
 	this.draw = function(){

@@ -76,14 +76,11 @@ function MyBlog(){
 		$.each($(".canvasElement"), function(i, e){
 			e.width = $(e).parent().width();
 			e.height = $(e).parent().height();
-			console.log(e.width);
 
 		});
-
 	}
 
 	this.loadPosts = function(localPage){
-
 		var pageNumber = MyBlog.pageNumber;
 
 		var requestData = {
@@ -107,10 +104,39 @@ function MyBlog(){
 		}else{
 			_this.buildPostsLocal(localPage);
 		}
+	}
 
+	this.loadPostById = function(postId){
+		var requestData = {
+			exp: postId
+		}
+
+		var ajaxConfig = {
+			URL:"/getPost",
+			data: requestData,
+			async:true,
+			callBack: _this.buildPost,
+			requestCallBack: null//_this.requestPostCallBack
+		}
+			new AjaxRequest().request(ajaxConfig);
+	}
+
+	this.buildPost = function(postData){
+		var parsedPost = JSON.parse(postData);
+
+		var post = {
+				id: parsedPost.id,
+				scriptUrl: parsedPost.scriptUrl,
+				scriptClass: parsedPost.scriptClass 
+			}
+
+		MyBlog.postElements.push(post);
+
+		_this.showPost(parsedPost.id);
 	}
 
 	this.buildPosts = function(data){
+		$("#postsGrid").empty();
 		var parsedData = JSON.parse(data);
 
 		var pageData = {
@@ -122,17 +148,19 @@ function MyBlog(){
 
 		MyBlog.postPages.push(pageData);
 
-		$("#postsGrid").empty();
-
 		parsedData.noBack ? $("#upArrowDiv").hide() : $("#upArrowDiv").show();
 		parsedData.lastPost ? $("#downArrowDiv").hide() : $("#downArrowDiv").show();
 
 		_this.buildPostsHtml(parsedData.posts);
 
 		if(!_this.firstLoaded){
-			_this.firstLoaded = true;
-			_this.showPost(MyBlog.postElements[0].id);
-			console.log("firstLoaded");
+			var exp = getParameterByName("exp");
+			if(exp != null && isNumber(exp) && exp > 0){
+				_this.loadPostById(exp);
+			}else{
+				_this.firstLoaded = true;
+				_this.showPost(MyBlog.postElements[0].id);
+			}
 		}
 	}
 
@@ -205,10 +233,13 @@ function MyBlog(){
 		pageNumber = isNumber(pageNumber) ? parseInt(pageNumber) : 1;
 
 		pageNumber = pageNumber < 1 ? 1 : pageNumber;
+
+		MyBlog.pageNumber = pageNumber;
 	}
 
 	this.getNextPage = function(){
 		MyBlog.pageNumber++;
+		$("#postsGrid").empty();
 		var localPage = _this.getLocalPage(MyBlog.pageNumber);
 		_this.loadPosts(localPage);
 	}
@@ -233,13 +264,45 @@ function MyBlog(){
 	}
 
 	this.requestPostsCallBack = function(){
-		$("#postsLoading").show();
+		$("#postsGrid").append("<div id='postsLoading'>"+
+			"<img id='postsLoadingImg' src='/img/loader.gif'></div>");
+	}
+
+	this.runScript = function(post){
+		var canvases = [];
+        var canvasRef = $(".canvasMain");
+        var canvasBg = $(".canvasBg");
+
+        var prevWidth = canvasRef.width;
+        var prevHeight = canvasRef.height;
+
+        $(".canvasMain").remove();
+        $(".canvasBg").remove();
+
+        $("#canvasArea").append("<canvas id='canvasBg' class='canvasBg canvasElement'>"+
+        	"</canvas> <canvas id='canvasMain' class='canvasMain canvasElement'></canvas>");
+
+        canvasRef = $(".canvasMain")[0];
+        canvasBg = $(".canvasBg")[0];
+
+        canvasRef.width = $("#canvasArea").width();
+        canvasRef.height = $("#canvasArea").height();
+        canvasBg.width = $("#canvasArea").width();
+        canvasBg.height = $("#canvasArea").height();
+
+        canvases.push(canvasBg);
+        canvases.push(canvasMain);
+
+        var scriptClass = new window[post.scriptClass]();
+        MyBlog.currentObject = scriptClass;
+        scriptClass.run(canvases);
 	}
 
 	this.showPost = function(postId){
 		var post = null;
 		if(MyBlog.currentObject != null){
 			MyBlog.currentObject.stop();
+			MyBlog.currentObject.reset();
 			delete MyBlog.currentObject;
 			MyBlog.currentObject = null;
 		}
@@ -251,35 +314,14 @@ function MyBlog(){
 		});
 
 		if(post != null){
-			$.getScript(post.scriptUrl, function(){
-
-				var canvases = [];
-		        var canvasRef = $(".canvasMain");
-		        var canvasBg = $(".canvasBg");
-
-		        var prevWidth = canvasRef.width;
-		        var prevHeight = canvasRef.height;
-
-		        $(".canvasMain").remove();
-		        $(".canvasBg").remove();
-
-		        $("#canvasArea").append("<canvas id='canvasBg' class='canvasBg canvasElement'></canvas> <canvas id='canvasMain' class='canvasMain canvasElement'></canvas>");
-
-		        canvasRef = $(".canvasMain")[0];
-		        canvasBg = $(".canvasBg")[0];
-
-		        canvasRef.width = $("#canvasArea").width();
-		        canvasRef.height = $("#canvasArea").height();
-		        canvasBg.width = $("#canvasArea").width();
-		        canvasBg.height = $("#canvasArea").height();
-
-		        canvases.push(canvasBg);
-		        canvases.push(canvasMain);
-
-		        var scriptClass = new window[post.scriptClass]();
-		        MyBlog.currentObject = scriptClass;
-		        scriptClass.run(canvases);
-      		});
+			if(typeof window[post.scriptClass] != "undefined"){
+				_this.runScript(post);
+			}else{
+				$.getScript(post.scriptUrl, function(){
+					_this.runScript(post);
+					
+	      		});
+			}
 		}
 	}
 }

@@ -6,7 +6,6 @@
 		<title>Fernando Flores V Lab</title>
 		<link rel="stylesheet" href="{{ asset ("/css/newLab.css") }}" />
 		<script src="{{ asset("/js/vendor/jquery1.11.js") }}"></script>
-		<script src="{{ asset("/js/exp/Garden.js") }}"></script>
 		<script src="{{ asset("/js/common.js") }}"></script>
 		<script src="{{ asset("/js/myblog.js") }}"></script>
 		<script src="{{ asset("/js/vendor/require.js") }}"></script>
@@ -68,9 +67,7 @@
 					<img id="upArrow" class="arrow" src="/img/icons/uparrow.png">
 				</div>
 				<div id="postsGrid">
-					<div id="postsLoading" style="display:none">
-						<img id="postsLoadingImg" src="/img/loader.gif">
-					</div>
+					
 				</div>
 				<div id="downArrowDiv">
 					<img id="downArrow" class="arrow" src="/img/icons/downarrow.png">

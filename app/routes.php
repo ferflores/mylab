@@ -17,3 +17,4 @@ Route::get('/', function()
 });
 
 Route::post('getPosts', array('uses'=>'HomeController@getPosts'));
+Route::post('getPost', array('uses'=>'HomeController@getPost'));
