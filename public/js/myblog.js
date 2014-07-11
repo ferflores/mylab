@@ -83,6 +83,8 @@ function MyBlog(){
 	this.loadPosts = function(localPage){
 		var pageNumber = MyBlog.pageNumber;
 
+		$("#postsGrid").empty();
+
 		var requestData = {
 			p: pageNumber
 		}
@@ -208,6 +210,7 @@ function MyBlog(){
 		$.each(MyBlog.postElements, function(i,e){
 			if(e.id == postId){
 				found = true;
+				return false;
 			}
 		});
 
@@ -249,6 +252,7 @@ function MyBlog(){
 		$.each(MyBlog.postPages, function(i,e){
 			if(e.pageNumber == page){
 				data = e;
+				return false;
 			}
 		});
 
