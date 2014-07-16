@@ -42,13 +42,11 @@ function Garden(){
 	}
 
 	this.resize = function(){
-		_this.floor = canvas[1].height - 50;
-		Garden.canvas = canvas[1];
-		Garden.context = canvas[1].getContext("2d");
-		Garden.canvasBg = canvas[0];
-		Garden.contextBg = canvas[0].getContext("2d");
-		_this.cx = canvas[1].width / 2;
-		_this.cy = canvas[1].height / 2;
+		_this.floor = Garden.canvas.height - 50;
+		_this.cx = Garden.canvas.width / 2;
+		_this.cy = Garden.canvas.height / 2;
+		_this.drawFLoor();
+		Garden.plants = [];
 	}
 
 	this.configure = function(){

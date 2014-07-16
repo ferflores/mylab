@@ -1,5 +1,5 @@
 body {
-  background-image: url("/img/background_big.jpg");
+  background-image: url("/img/background_big_op.jpg");
   background-position: center center;
   background-repeat: no-repeat;
   background-attachment: fixed;
@@ -11,6 +11,7 @@ body {
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
+  overflow: hidden;
 }
 
 #main {
@@ -21,13 +22,19 @@ body {
   background-color: #000000;
   opacity: 0;
   filter: alpha(opacity=0); /* For IE8 and earlier */
+}
+
+.roundedDiv {
+  behavior: url(/css/border-radius.htc);
   -moz-border-radius: 15px;
   border-radius: 15px;
+  -webkit-border-radius: 15px;
+  -khtml-border-radius: 15px;
 }
 
 #leftBarBg {
   position: absolute;
-  background-image: url('/img/background_big.jpg');
+  background-image: url('/img/background_big_op.jpg');
   top: 0px;
   right: 0px;
   bottom: 0px;
@@ -55,8 +62,6 @@ body {
   background: rgb(20,51,7); /* for IE */
   background: rgba(20,51,7,0.6);
   z-index: 100;
-  -moz-border-radius: 15px;
-  border-radius: 15px;
 }
 
 #canvasArea {
@@ -66,8 +71,6 @@ body {
   height: 95vh;
   z-index: 101;
   position: relative;
-  -moz-border-radius: 15px;
-  border-radius: 15px;
 }
 
 .canvasBg {
@@ -124,17 +127,59 @@ body {
 
 
 .preview-img:hover {
-    filter: none;
-    -webkit-filter: sepia(0);
-    -moz-filter: sepia(0);
-    -ms-filter: sepia(0);
-    -o-filter: sepia(0);
-    filter: sepia(0);
+  filter: none;
+  -webkit-filter: sepia(0);
+  -moz-filter: sepia(0);
+  -ms-filter: sepia(0);
+  -o-filter: sepia(0);
+  filter: sepia(0);
 }
 
 #postsLoadingImg {
-  width: 20%;
-  max-width: 100px;
+  width: 15%;
+  max-width: 60px;
+}
+
+#canvasTitle {
+  color:Silver;
+  font-family: 'Arial'; 
+  font-size: .8rem;
+  padding-left: 1rem;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  background-color: black;
+  z-index: 150;
+  position: absolute;
+  width: 98%;
+  opacity: .3;
+  filter: alpha(opacity=30); /* For IE8 and earlier */
+}
+
+#canvasTitle:hover{
+  opacity: 1;
+  filter: alpha(opacity=100); /* For IE8 and earlier */
+}
+
+#canvasTitleText{
+  vertical-align: top;
+  padding-left: 1rem;
+}
+
+.fbshare {
+  width:70px;
+  cursor:pointer;
+  padding-right: 1rem;
+}
+
+#directLink {
+  color:Silver;
+  text-decoration: none;
+}
+
+.chromeText {
+  font-family: 'monof55';
+  font-size: .6rem;
+  color: Silver;
 }
 
 /***************************** FONTS *********************************************/
@@ -144,4 +189,76 @@ body {
     src: url('/fonts/SourceCodePro-Light.otf');
     font-weight: normal;
     font-style: normal;
+}
+
+/**************************** Media queries **************************************/
+
+@media screen and (max-width: 1300px) { 
+  .page-title {
+    font-size: 1rem;
+    content: "fer flores"
+  }
+
+  .post-title {
+    font-size: .6rem;
+  }
+
+  .arrow {
+    width: 20px;
+  }
+
+  #canvasTitleText{
+    font-size: .6rem;
+  }
+
+  .fbshare {
+    width: 60px;
+  }
+
+  #directLink {
+    font-size: .6rem;
+  }
+
+  .chromeText {
+    font-size: .6rem;
+  }
+
+  .preview-img{
+    max-width: 150px;
+  }
+}
+
+@media screen and (max-width: 600px) { 
+  .page-title {
+    font-size: .5rem;
+    content: "fer flores"
+  }
+
+  .post-title {
+    font-size: .3rem;
+  }
+
+  .arrow {
+    width: 15px;
+  }
+
+  #canvasTitleText{
+    font-size: .5rem;
+  }
+
+  .fbshare {
+    width: 50px;
+  }
+
+  #directLink {
+    font-size: .5rem;
+  }
+
+  .chromeText {
+    font-size: .5rem;
+  }
+
+  .preview-img{
+    max-width: 100px;
+  }
 }

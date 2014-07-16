@@ -24,10 +24,10 @@ function MyBlog(){
 
 	this.bindMainEvents = function(){
 		$("#upArrow").on("mouseover",function(){
-			$(this).animate({ width: "50"}, "fast");
+			$(this).animate({ width: "40"}, "fast");
 		});
 		$("#downArrow").on("mouseover",function(){
-			$(this).animate({ width: "50"}, "fast");
+			$(this).animate({ width: "40"}, "fast");
 		});
 		$("#upArrow").on("mouseout",function(){
 			$(this).animate({ width: "30"}, "fast");
@@ -63,12 +63,29 @@ function MyBlog(){
 		});
 
 		$(".post-title").on("click", function(){
-			_this.showPost(this.closest(".post").attr("data-id"));
+			_this.showPost($(this).closest(".post").attr("data-id"));
 		});
 
 		$(".preview-img").on("click", function(){
 			_this.showPost($(this).closest(".post").attr("data-id"));
 		});
+	}
+
+	this.bindSinglePostEvents = function(){
+		$(".fbshare").on("click",function(){
+			FBShareOp(MyBlog.currentPost.title, MyBlog.currentPost.content
+				, "http://ferflores.net"+ MyBlog.currentPost.img
+				,"http://www.ferflores.net/?exp="+MyBlog.currentPost.id);
+		});
+
+		$("#canvasTitleText").removeClass("zoomIn");
+		$("#canvasTitleText").addClass("zoomOut");
+		setTimeout(function(){
+			$("#canvasTitleText").html(MyBlog.currentPost.content);
+
+			$("#canvasTitleText").removeClass("zoomOut");
+			$("#canvasTitleText").addClass("zoomIn");
+		}, 1000);
 	}
 
 	this.resize = function(){
@@ -78,6 +95,8 @@ function MyBlog(){
 			e.height = $(e).parent().height();
 
 		});
+
+		MyBlog.currentObject.resize();
 	}
 
 	this.loadPosts = function(localPage){
@@ -129,11 +148,13 @@ function MyBlog(){
 		var post = {
 				id: parsedPost.id,
 				scriptUrl: parsedPost.scriptUrl,
-				scriptClass: parsedPost.scriptClass 
+				scriptClass: parsedPost.scriptClass,
+				title: parsedPost.title,
+				content: parsedPost.content,
+				img: parsedPost.img
 			}
 
 		MyBlog.postElements.push(post);
-
 		_this.showPost(parsedPost.id);
 	}
 
@@ -189,7 +210,10 @@ function MyBlog(){
 				var post = {
 					id: e.id,
 					scriptUrl: e.scriptUrl,
-					scriptClass: e.scriptClass 
+					scriptClass: e.scriptClass,
+					title: e.title,
+					content: e.content,
+					img: e.img
 				}
 
 				MyBlog.postElements.push(post);
@@ -303,6 +327,10 @@ function MyBlog(){
 	}
 
 	this.showPost = function(postId){
+		_this.bindSinglePostEvents();
+
+		$("#directLink").attr("href","http://www.ferflores.net/?exp="+postId);
+
 		var post = null;
 		if(MyBlog.currentObject != null){
 			MyBlog.currentObject.stop();
@@ -313,6 +341,7 @@ function MyBlog(){
 		$.each(MyBlog.postElements, function(i,e){
 			if(e.id == postId){
 				post = e;
+				MyBlog.currentPost = e;
 				return false;
 			}
 		});
@@ -334,5 +363,6 @@ MyBlog.postElements = [];
 MyBlog.postPages = [];
 MyBlog.pageNumber = 1;
 MyBlog.currentObject = null;
+MyBlog.currentPost = null;
 
 function Common(){}
