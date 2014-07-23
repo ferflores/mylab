@@ -146,7 +146,7 @@ function mAsteroids(){
 	this.gameOver = function(){
 		_this.ship.isDead = true;
 		var exp = new Explosion();
-		exp.create(_this.ship.particle.position.getX(), _this.ship.particle.position.getY(), 800);
+		exp.create(_this.ship.particle.position.getX(), _this.ship.particle.position.getY(), 400);
 		_this.explosions.push(exp);
 		setTimeout(function(){ 
 			_this.ship.particle.velocity.setX(0);
