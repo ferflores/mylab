@@ -11,6 +11,7 @@ function mAsteroids(){
 	this.bullets = [];
 	this.enemies = [];
 	this.explosions = [];
+	this.stopped = false;
 
 	this.run = function(canvas, canvasWidth, canvasHeight){
 		_this = this;
@@ -33,6 +34,7 @@ function mAsteroids(){
 	this.stop = function(){
 		document.body.removeEventListener("keydown");
 		document.body.removeEventListener("keyup");
+		_this.stopped = true;
 	}
 
 	this.reset =function(){
@@ -130,7 +132,7 @@ function mAsteroids(){
 				enemy.onScreen = true;
 			}
 
-			if(enemy.particle.position.getX() < -100 || enemy.particle.position.getX() > _this.canvas.width + 100
+			if(enemy.particle.position.getX() < 100 || enemy.particle.position.getX() > _this.canvas.width + 100
 				&& enemy.particle.position.getY() < 100 || enemy.particle.position.getY() > _this.canvas.height + 100
 				&& enemy.onScreen){
 				_this.enemies.splice(x,1);
@@ -242,7 +244,9 @@ function mAsteroids(){
 
 		_this.drawExplosions();
 
-		requestAnimationFrame(_this.main);
+		if(!this.stopped){
+			requestAnimationFrame(_this.main);
+		}
 	}
 
 	function Ship(){

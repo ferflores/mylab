@@ -1,6 +1,3 @@
-mylab
-=====
-
-my personal development lab
+My personal development lab
 
 www.ferflores.net
