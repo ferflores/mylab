@@ -29,6 +29,8 @@ function Garden(){
 
 	this.stop = function(){
 		_this.stopped = true;
+		_this.seeds = null;
+		Garden.plants = null;
 	}
 
 	this.reset = function(){
