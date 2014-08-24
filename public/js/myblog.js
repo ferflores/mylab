@@ -350,10 +350,11 @@ function MyBlog(){
 			if(typeof window[post.scriptClass] != "undefined"){
 				_this.runScript(post);
 			}else{
-				$.getScript(post.scriptUrl, function(){
+				$.getScript(post.scriptUrl, function( data, textStatus, jqxhr ) {
 					_this.runScript(post);
-					
-	      		});
+			}).fail(function( jqxhr, settings, exception ) {
+   				console.log( "Triggered ajaxError handler." );
+				});
 			}
 		}
 	}

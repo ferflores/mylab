@@ -134,7 +134,7 @@ function Spider(){
 		this.legs = [];
 		this.size = 0;
 		this.radious = 0;
-		this.legLength = 25;
+		this.legLength = 35;
 		this.drag = false;
 		this.direction = 5.5;
 		this.walkProb = .8;

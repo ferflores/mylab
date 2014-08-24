@@ -29,9 +29,16 @@ function EatingPacman(){
 		var pacman = new Pacman();
 		pacman.create(200,100, false);
 		var pacman2 = new Pacman();
-		pacman2.create(600,100, true);
+		pacman2.create(300,100, true);
 		_this.pacmans.push(pacman);
 		_this.pacmans.push(pacman2);
+
+		var bgc = _this.contextBg;
+		bgc.globalCompositeOperation = 'source-over';
+		bgc.beginPath();
+		bgc.fillStyle = "#337D29";
+		bgc.arc(Math.random()*(_this.canvas.width-10)+10, Math.random()*(_this.canvas.height-10)+10, Math.random()*50+30,Math.PI*2,false);
+		bgc.fill();
 	}
 
 	this.drawPacmans = function(){
@@ -41,11 +48,13 @@ function EatingPacman(){
 		};
 	}
 	this.bindEvents = function(){
+		document.addEventListener("mouseup",function(e){
 			var mX = (e.pageX  - _this.canvas.offsetParent.offsetLeft);
 			var mY = (e.pageY  - _this.canvas.offsetParent.offsetTop);
 			var bgc = _this.contextBg;
 			bgc.globalCompositeOperation = 'source-over';
 			bgc.beginPath();
+			bgc.fillStyle = "#337D29";
 			bgc.arc(mX, mY, Math.random()*50+30,Math.PI*2,false);
 			bgc.fill();
 		});
@@ -178,7 +187,6 @@ function EatingPacman(){
 				this.lastScanTime = currentTime;
 				nextPoint = _this.scanBlack(this.scanReverse);
 				if(nextPoint!=null){
-					console.log(nextPoint.posx, nextPoint.posy);
 					var dy = (nextPoint.posy) -this.particle.y;
 					var dx = (nextPoint.posx) - this.particle.x;
 					var newAngle = Math.atan2(dy,dx);
