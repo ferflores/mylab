@@ -8,7 +8,7 @@
 		<link rel="stylesheet" href="{{ asset ("/css/animate.css") }}" />
 		<script src="{{ asset("/js/vendor/jquery1.11.js") }}"></script>
 		<script src="{{ asset("/js/common.js") }}"></script>
-		<script src="{{ asset("/js/myblog.minified.js") }}"></script>
+		<script src="{{ asset("/js/myblog.js") }}"></script>
 		<script src="{{ asset("/js/vendor/require.js") }}"></script>
 	</head>
 	<body>

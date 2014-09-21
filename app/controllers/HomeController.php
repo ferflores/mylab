@@ -20,7 +20,7 @@ class HomeController extends BaseController {
 		$result = new stdClass();
 		$result->posts = $filteredPosts;
 		$result->noBack = $pageNumber == 0;
-		$result->lastPost = $pageNumber + 1 * 3 >= Post::count();
+		$result->lastPost = ($pageNumber + 1) * 3 >= Post::count()-1;
 		
 		return json_encode($result);
 	}
